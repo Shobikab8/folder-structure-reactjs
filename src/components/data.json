@@ -1,5 +1,4 @@
 {
-    "Evaluation": {
         "Desktop": ["Screenshot1.jpg", "videopal.mp4"],
         "Documents": ["Document1.jpg", "Document2.jpg", "Document3.jpg"],
         "Downloads": {
@@ -8,5 +7,4 @@
         },
         "Applications": ["Webstorm.dmg", "Pycharm.dmg", "FileZila.dmg", "Mattermost.dmg"],
         "chromedriver.dmg" : []
-    }
 }
