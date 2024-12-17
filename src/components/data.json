@@ -1,0 +1,12 @@
+{
+    "Evaluation": {
+        "Desktop": ["Screenshot1.jpg", "videopal.mp4"],
+        "Documents": ["Document1.jpg", "Document2.jpg", "Document3.jpg"],
+        "Downloads": {
+            "Drivers": ["Printerdriver.dmg", "cameradriver.dmg"],
+            "Images": []
+        },
+        "Applications": ["Webstorm.dmg", "Pycharm.dmg", "FileZila.dmg", "Mattermost.dmg"],
+        "chromedriver.dmg" : []
+    }
+}
