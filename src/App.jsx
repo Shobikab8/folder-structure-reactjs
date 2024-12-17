@@ -1,4 +1,5 @@
 import './App.css'
+import FileStructure from './FileStructure'
 
 function App() {
   
@@ -6,7 +7,7 @@ function App() {
   return (
     <>
 
-      <h1>Hi</h1>
+      <FileStructure/>
 
     </>
   )
