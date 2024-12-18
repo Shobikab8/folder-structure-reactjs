@@ -1,9 +1,10 @@
+html, body{
+    background-color: #171f30;
+}
+
 ul{
     list-style: none;;
 }
 
-ChevronRightIcon{
-    height: 12px;
-    vertical-align: middle;
-}
+
 

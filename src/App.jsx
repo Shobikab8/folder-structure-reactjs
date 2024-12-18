@@ -1,5 +1,7 @@
 import './App.css'
-import FileStructure from './FileStructure'
+
+import FileStructure from './components/FileStructure1'
+
 
 function App() {
   
