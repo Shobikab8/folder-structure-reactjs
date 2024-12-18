@@ -28,7 +28,7 @@ function FileSystem({ node, name, path, onAddItem, onDeleteItem, onRenameItem })
   const handleNewItemSubmit = (e) => {
     e.preventDefault();
     if (newItemName) {
-      onAddItem([...path, name, newItemName], newItemType, newItemName);
+      onAddItem([], newItemType, newItemName);
       setIsAddingItem(false);
       setNewItemName('');
     }
