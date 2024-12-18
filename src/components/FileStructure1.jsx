@@ -5,8 +5,9 @@ import { ChevronRightIcon, DocumentPlusIcon, FolderPlusIcon } from '@heroicons/r
 
 export default function FileStructure1() {
 
+  //folders as objects and leaf nodes as array
   const jsonData = {
-    "Desktop": ["Screenshot1.jpg", "videopal.mp4"],
+      "Desktop": ["Screenshot1.jpg", "videopal.mp4"],
     "Documents": ["Document1.jpg", "Document2.jpg", "Document3.jpg"],
     "Downloads": {
         "Drivers": ["Printerdriver.dmg", "cameradriver.dmg"],
@@ -29,18 +30,27 @@ export default function FileStructure1() {
     const newData = JSON.parse(JSON.stringify(data));
     let current = newData;
 
-    for (let i = 0; i < path.length; i++) {
-      if(!current[path[i]] || typeof current[path[i]] !== 'object'){
-        current[path[i]] = {};
-      } 
+    for (let i = 0; i < path.length -1 ; i++) {
+      
       current = current[path[i]];
     }
 
-    if (Array.isArray(current)) {
-      current.push(name);
-    } else {
-      current[name] = type === "folder" ? {} : null;
+
+    if(path.length === 0){
+      if(type === "folder"){
+        current[name] = {};
+      } else{
+        current[name] = null;
+      }
+    }else{
+      const target = current[path[path.length-1]];
+      if (Array.isArray(target)) {
+        target.push(name);
+      } else if(typeof target === "object"){
+        target[name] = type === "folder" ? {} : null;
+      }
     }
+    
     setData(newData);
     
   };
@@ -58,6 +68,7 @@ export default function FileStructure1() {
     if (newItemName) {
       addNewItem([], newItemType, newItemName);
       setIsAddingItem(false);
+      setNewItemType(null);
       setNewItemName('');
     }
   };

@@ -28,12 +28,14 @@ function FileSystem({ node, name, path, onAddItem, onDeleteItem, onRenameItem })
   const handleNewItemSubmit = (e) => {
     e.preventDefault();
     if (newItemName) {
-      onAddItem([], newItemType, newItemName);
+      onAddItem([...path], newItemType, newItemName);
       setIsAddingItem(false);
+      setNewItemType(null);
       setNewItemName('');
     }
   };
 
+  //rendering child nodes
   return (
     <li
       onMouseEnter={() => setIsHovered(true)}
@@ -117,7 +119,7 @@ function FileSystem({ node, name, path, onAddItem, onDeleteItem, onRenameItem })
                 key={file}
                 node={null}
                 name={file}
-                path={[...path, name]}
+                path={[...path]}
                 onAddItem={onAddItem}
                 onDeleteItem={onDeleteItem}
                 onRenameItem={onRenameItem}
@@ -129,7 +131,7 @@ function FileSystem({ node, name, path, onAddItem, onDeleteItem, onRenameItem })
                 key={key}
                 node={value}
                 name={key}
-                path={[...path, name]}
+                path={[...path]}
                 onAddItem={onAddItem}
                 onDeleteItem={onDeleteItem}
                 onRenameItem={onRenameItem}
