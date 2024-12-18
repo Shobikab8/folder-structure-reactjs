@@ -1,9 +1,21 @@
 import React, { useState } from 'react';
-import jsonData from './data.json';
+
 import FileSystem from './FileSystem1';
 import { ChevronRightIcon, DocumentPlusIcon, FolderPlusIcon } from '@heroicons/react/24/solid';
 
 export default function FileStructure1() {
+
+  const jsonData = {
+    "Desktop": ["Screenshot1.jpg", "videopal.mp4"],
+    "Documents": ["Document1.jpg", "Document2.jpg", "Document3.jpg"],
+    "Downloads": {
+        "Drivers": ["Printerdriver.dmg", "cameradriver.dmg"],
+        "Images": []
+    },
+    "Applications": ["Webstorm.dmg", "Pycharm.dmg", "FileZila.dmg", "Mattermost.dmg"],
+    "chromedriver.dmg" : null
+};
+
   const [data, setData] = useState(jsonData);
   const projectName = "evaluation";
   const [isRootOpen, setIsRootOpen] = useState(true);
@@ -11,13 +23,14 @@ export default function FileStructure1() {
   const [newItemType, setNewItemType] = useState(null);
   const [newItemName, setNewItemName] = useState('');
 
+  //rendering each file and folder when adding new item
   const addNewItem = (path, type, name) => {
     
     const newData = JSON.parse(JSON.stringify(data));
     let current = newData;
 
     for (let i = 0; i < path.length; i++) {
-      if(current[path[i]] === undefined){
+      if(!current[path[i]] || typeof current[path[i]] !== 'object'){
         current[path[i]] = {};
       } 
       current = current[path[i]];
@@ -31,6 +44,7 @@ export default function FileStructure1() {
     setData(newData);
     
   };
+
 
   const handleAddItem = (type) => {
     setIsAddingItem(true);
@@ -51,6 +65,8 @@ export default function FileStructure1() {
     <div className="bg-gray-900 p-4 rounded-lg text-gray-300 max-w-md m-5">
       <ul className="mt-4">
         <li>
+
+          {/* rendering root folder with buttons */}
           <div className="flex items-center">
             <button onClick={() => setIsRootOpen(!isRootOpen)} className="p-1 -m-1">
               <ChevronRightIcon className={`w-4 h-4 text-gray-500 transition-transform ${isRootOpen ? 'rotate-90' : ''}`} />
@@ -63,6 +79,8 @@ export default function FileStructure1() {
               <FolderPlusIcon className='w-5 h-5 text-gray-500 hover:text-gray-300' />
             </button>
           </div>
+
+          {/* functionality for adding folder/file with input */}
           {isAddingItem && (
             <div className='mt-2 pl-6'>
               <form onSubmit={handleNewItemSubmit} className="mt-2">
@@ -77,11 +95,12 @@ export default function FileStructure1() {
                   className="bg-gray-700 text-gray-300 px-2 py-1 rounded"
                   autoFocus
                 />
-                
               </form>
             </div>
           )}
 
+
+          {/* rendering after crud operation */}
           {isRootOpen && (
             <ul className="pl-6">
               {Object.entries(data).map(([key, value]) => (

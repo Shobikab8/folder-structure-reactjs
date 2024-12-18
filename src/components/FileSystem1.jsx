@@ -28,7 +28,7 @@ function FileSystem({ node, name, path, onAddItem, onDeleteItem, onRenameItem })
   const handleNewItemSubmit = (e) => {
     e.preventDefault();
     if (newItemName) {
-      onAddItem([], newItemType, newItemName);
+      onAddItem([...path, name, newItemName], newItemType, newItemName);
       setIsAddingItem(false);
       setNewItemName('');
     }
@@ -64,6 +64,8 @@ function FileSystem({ node, name, path, onAddItem, onDeleteItem, onRenameItem })
         ) : (
           <span>{name}</span>
         )}
+
+        {/* folder crud icons */}
         {isHovered && !isEditing && (
           <div className="absolute right-2 flex gap-1">
             <button onClick={() => setIsEditing(true)}>
@@ -86,6 +88,7 @@ function FileSystem({ node, name, path, onAddItem, onDeleteItem, onRenameItem })
         )}
       </div>
 
+        {/* rendering form when add new folder/file button is clicked */}
       {isAddingItem && (
         <div className='mt-2' style={{paddingLeft: `${(path.length+2)}rem`}}>
           <form onSubmit={handleNewItemSubmit}>
@@ -105,6 +108,7 @@ function FileSystem({ node, name, path, onAddItem, onDeleteItem, onRenameItem })
         </div>
       )}
 
+      {/* rendering for when a folder is open */}
       {isOpen && isFolder && (
         <ul className="pl-6">
           {Array.isArray(node) ? (
