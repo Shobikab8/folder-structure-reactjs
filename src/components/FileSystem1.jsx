@@ -6,6 +6,9 @@ function FileSystem({ node, name, path, onAddItem, onDeleteItem, onRenameItem })
   const [isHovered, setIsHovered] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editedName, setEditedName] = useState(name);
+  const [isAddingItem, setIsAddingItem] = useState(false);
+  const [newItemType, setNewItemType] = useState(null);
+  const [newItemName, setNewItemName] = useState('');
 
   const isFolder = node !== null && typeof node === 'object';
 
@@ -16,11 +19,26 @@ function FileSystem({ node, name, path, onAddItem, onDeleteItem, onRenameItem })
     setIsEditing(false);
   };
 
+  const handleAddItem = (type) => {
+    setIsAddingItem(true);
+    setNewItemType(type);
+    setNewItemName('');
+  };
+
+  const handleNewItemSubmit = (e) => {
+    e.preventDefault();
+    if (newItemName) {
+      onAddItem([], newItemType, newItemName);
+      setIsAddingItem(false);
+      setNewItemName('');
+    }
+  };
+
   return (
     <li
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="relative"
+      className="relative pl-4"
     >
       <div className="flex items-center gap-2 py-1 px-2 rounded-md hover:bg-gray-800">
         {isFolder ? (
@@ -47,7 +65,7 @@ function FileSystem({ node, name, path, onAddItem, onDeleteItem, onRenameItem })
           <span>{name}</span>
         )}
         {isHovered && !isEditing && (
-          <div className="absolute right-0 flex gap-1">
+          <div className="absolute right-2 flex gap-1">
             <button onClick={() => setIsEditing(true)}>
               <PencilIcon className="w-4 h-4 text-gray-500 hover:text-gray-300" />
             </button>
@@ -56,10 +74,10 @@ function FileSystem({ node, name, path, onAddItem, onDeleteItem, onRenameItem })
             </button>
             {isFolder && (
               <>
-                <button onClick={() => onAddItem(path, "file")}>
+                <button onClick={() => handleAddItem("file")}>
                   <DocumentPlusIcon className="w-4 h-4 text-gray-500 hover:text-gray-300" />
                 </button>
-                <button onClick={() => onAddItem(path, "folder")}>
+                <button onClick={() => handleAddItem("folder")}>
                   <FolderPlusIcon className="w-4 h-4 text-gray-500 hover:text-gray-300" />
                 </button>
               </>
@@ -67,6 +85,25 @@ function FileSystem({ node, name, path, onAddItem, onDeleteItem, onRenameItem })
           </div>
         )}
       </div>
+
+      {isAddingItem && (
+        <div className='mt-2' style={{paddingLeft: `${(path.length+2)}rem`}}>
+          <form onSubmit={handleNewItemSubmit}>
+            <input
+              type="text"
+              value={newItemName}
+              onChange={(e) => setNewItemName(e.target.value)}
+              onKeyDown={(e) => {
+                if(e.key === 'Enter'){
+                  
+                  handleNewItemSubmit(e);
+                } }}
+              className="bg-gray-700 text-gray-300 px-2 py-1 rounded"
+              autoFocus
+            />
+          </form>
+        </div>
+      )}
 
       {isOpen && isFolder && (
         <ul className="pl-6">
@@ -76,7 +113,7 @@ function FileSystem({ node, name, path, onAddItem, onDeleteItem, onRenameItem })
                 key={file}
                 node={null}
                 name={file}
-                path={[...path, file]}
+                path={[...path, name]}
                 onAddItem={onAddItem}
                 onDeleteItem={onDeleteItem}
                 onRenameItem={onRenameItem}
@@ -88,7 +125,7 @@ function FileSystem({ node, name, path, onAddItem, onDeleteItem, onRenameItem })
                 key={key}
                 node={value}
                 name={key}
-                path={[...path, key]}
+                path={[...path, name]}
                 onAddItem={onAddItem}
                 onDeleteItem={onDeleteItem}
                 onRenameItem={onRenameItem}

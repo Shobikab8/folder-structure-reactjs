@@ -7,20 +7,44 @@ export default function FileStructure1() {
   const [data, setData] = useState(jsonData);
   const projectName = "evaluation";
   const [isRootOpen, setIsRootOpen] = useState(true);
+  const [isAddingItem, setIsAddingItem] = useState(false);
+  const [newItemType, setNewItemType] = useState(null);
+  const [newItemName, setNewItemName] = useState('');
 
-  const addNewItem = (path, type) => {
-    const newName = type === "folder" ? "New Folder" : "New File";
+  const addNewItem = (path, type, name) => {
+    
     const newData = JSON.parse(JSON.stringify(data));
     let current = newData;
+
     for (let i = 0; i < path.length; i++) {
+      if(current[path[i]] === undefined){
+        current[path[i]] = {};
+      } 
       current = current[path[i]];
     }
+
     if (Array.isArray(current)) {
-      current.push(newName);
+      current.push(name);
     } else {
-      current[newName] = type === "folder" ? {} : null;
+      current[name] = type === "folder" ? {} : null;
     }
     setData(newData);
+    
+  };
+
+  const handleAddItem = (type) => {
+    setIsAddingItem(true);
+    setNewItemType(type);
+    setNewItemName('');
+  };
+
+  const handleNewItemSubmit = (e) => {
+    e.preventDefault();
+    if (newItemName) {
+      addNewItem([], newItemType, newItemName);
+      setIsAddingItem(false);
+      setNewItemName('');
+    }
   };
 
   return (
@@ -32,13 +56,32 @@ export default function FileStructure1() {
               <ChevronRightIcon className={`w-4 h-4 text-gray-500 transition-transform ${isRootOpen ? 'rotate-90' : ''}`} />
             </button>
             <span className='p-2 font-semibold'>{projectName.toUpperCase()}</span>
-            <button onClick={() => addNewItem([], "file")} className="ml-auto">
+            <button onClick={() => handleAddItem("file")} className="ml-auto">
               <DocumentPlusIcon className='w-5 h-5 text-gray-500 hover:text-gray-300' />
             </button>
-            <button onClick={() => addNewItem([], "folder")}>
+            <button onClick={() => handleAddItem("folder")}>
               <FolderPlusIcon className='w-5 h-5 text-gray-500 hover:text-gray-300' />
             </button>
           </div>
+          {isAddingItem && (
+            <div className='mt-2 pl-6'>
+              <form onSubmit={handleNewItemSubmit} className="mt-2">
+                <input
+                  type="text"
+                  value={newItemName}
+                  onChange={(e) => setNewItemName(e.target.value)}
+                  onKeyDown={(e) => {
+                    if(e.key === 'Enter'){
+                      handleNewItemSubmit();
+                    } }}
+                  className="bg-gray-700 text-gray-300 px-2 py-1 rounded"
+                  autoFocus
+                />
+                
+              </form>
+            </div>
+          )}
+
           {isRootOpen && (
             <ul className="pl-6">
               {Object.entries(data).map(([key, value]) => (
